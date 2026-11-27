@@ -11,7 +11,7 @@
 .
 ├── frontend/                 Vue 3 + Vite + TypeScript 前端
 │   ├── src/views/WorkbenchView.vue|tsx  全部模块共享工作台
-│   ├── src/data/modules.ts              18个业务模块配置
+│   ├── src/data/modules.ts              21个业务模块配置
 │   ├── src/api/              统一请求封装
 │   └── vite.config.ts        dev server 配置（open: false）
 ├── backend/                  FastAPI（Python） 后端
@@ -70,6 +70,7 @@ npm run dev
 | 教学资源申请 | `resource_apply` | 资源申请 | 申请资源、用途说明、使用时间 |
 | 质量简报 | `quality_report` | 质量简报 | 覆盖学期、教学质量概况、突出问题 |
 | 教材选用 | `textbook_select` | 选用单 | 教材名称、主编、出版社 |
+| 教材到货 | `textbook_arrival` | 到货记录 | 订单编号、回单编号、到货批次 |
 
 ## 约定
 
@@ -78,6 +79,26 @@ npm run dev
   `frontend/src/domain/<模块>.ts`，用于承载真实业务差异并维持36题位容量。
 - 列表接口统一返回 `{ items, total, page, size }`，动作接口统一返回 `{ ok, message }`。
 - 状态流转只允许在 `app/services` 里改，路由层不做业务判断。
+
+## 教材分批到货与大纲采用
+
+- `textbook_arrival` 提供到货文件上传与回单导入回执核对：
+  - `POST /api/textbook_arrival/upload`：multipart 上传 CSV（表头见模块字段），
+    返回导入回执（新增/重复/跳过行数、回单状态、已核对数量）；
+  - `POST /api/textbook_arrival/import`：粘贴多行 JSON 导入，语义与上传一致；
+  - `GET /api/textbook_arrival/receipts`：按订单 + 回单聚合的回执核对清单。
+- 幂等键为「订单编号 + 回单编号 + 到货批次 + 教材名称」。同一回单重复导入
+  只返回回执、不重复计数；到货必须匹配订单所属课程和教材，其他课程的同名书
+  不能挂到本订单（如 H-31 只计数据结构课程的《数据结构（第2版）》）。
+- 回单核对后 `已核对` 数量计入订单；发现缺货时执行“更正缺货”（可附缺货证明说明），
+  该批次不再计入已核对数量，并同步刷新同课程待审批大纲的采用资格。
+- 列表 `textbook_arrival` 同时就是缺货证明的录入入口，可按订单/批次筛选。
+- 大纲修订（`syllabus_rev`）在审批入口按到货情况判定采用资格：
+  - `GET /api/syllabus_rev/{id}/adoption` 查询当前资格与数量明细；
+  - “办理采用”仅在已核对数量满足需求时成功；
+  - 不足时须“确认替换教材”（补填替换教材与替换依据），再提交审批；
+  - 每次审批通过会把当时使用的教材与回单编号写入 `审批时教材` / `审批时回单编号`
+    及 `审批快照`，后续到货更正不会改写已批准版本。
 
 领域：应用开发
 子方向：web前端/全栈开发

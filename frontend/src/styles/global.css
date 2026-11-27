@@ -33,6 +33,13 @@ body { margin: 0; background: #f6f8fb; color: #1f2937; }
 .link { border: none; background: none; color: var(--brand); cursor: pointer; padding: 0; }
 .page-foot { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--muted); }
 .error-text { color: #b42318; }
+.warn-text { color: #b54708; font-weight: 600; }
+.row-abnormal { background: #fff7ed; }
+.receipt-banner { border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; font-size: 13px; }
+.receipt-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.receipt-grid { display: flex; flex-wrap: wrap; gap: 4px 16px; color: #334155; }
+.receipt-skip { margin: 6px 0 0; padding-left: 18px; color: #b42318; }
+.paste-area { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 8px; font-family: inherit; font-size: 13px; }
 .modal-backdrop { position: fixed; inset: 0; background: rgb(15 23 42 / 35%); display: grid; place-items: center; padding: 20px; z-index: 20; }
 .modal { width: min(560px, 100%); max-height: 90vh; overflow: auto; background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 20px 50px rgb(15 23 42 / 20%); }
 .create-field { display: block; margin-bottom: 10px; }

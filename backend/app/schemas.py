@@ -29,3 +29,22 @@ class EntryPayload(BaseModel):
 class ActionPayload(BaseModel):
     action: str
     remark: str | None = None
+    values: dict[str, Any] = Field(default_factory=dict)
+
+
+class ReceiptImportPayload(BaseModel):
+    """到货回单导入请求：既支持一次粘贴多行，也支持引用已上传文件。"""
+
+    rows: list[dict[str, Any]] = Field(default_factory=list)
+    filename: str = ""
+    order_no: str = ""
+    receipt_no: str = ""
+    course: str = ""
+    textbook: str = ""
+    import_batch: str = ""
+
+
+class ReceiptImportResult(BaseModel):
+    ok: bool
+    message: str
+    receipt: dict[str, Any] = Field(default_factory=dict)

@@ -22,6 +22,7 @@ from app.services.class_schedule import ClassScheduleService
 from app.services.resource_apply import ResourceApplyService
 from app.services.quality_report import QualityReportService
 from app.services.textbook_select import TextbookSelectService
+from app.services.textbook_arrival import TextbookArrivalService
 
 SERVICES: dict[str, BaseModuleService] = {
     "observation": ObservationService(),
@@ -44,6 +45,7 @@ SERVICES: dict[str, BaseModuleService] = {
     "resource_apply": ResourceApplyService(),
     "quality_report": QualityReportService(),
     "textbook_select": TextbookSelectService(),
+    "textbook_arrival": TextbookArrivalService(),
 }
 
 

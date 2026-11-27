@@ -30,7 +30,27 @@ export type PageResult = {
 export type ActionResult = {
   ok: boolean
   message: string
+  entry?: EntryRow
 }
+
+export type ArrivalReceipt = {
+  ok: boolean
+  message: string
+  receipt: {
+    订单编号: string
+    回单编号: string
+    文件名: string
+    新增行数: number
+    重复行数: number
+    跳过行数: number
+    跳过明细: { 行号: number; 原因: string }[]
+    重复导入: boolean
+    回单状态: string
+    已核对数量: number
+    待核对数量: number
+  }
+}
+
 
 export type OverviewResult = {
   cards: { label: string; value: number }[]
